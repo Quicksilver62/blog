@@ -6,7 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -30,14 +29,12 @@ public class DbPost {
   private String preview;
   @Column
   private UUID picture;
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-  @JoinColumn
-  List<DbComment> comments;
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<DbComment> comments;
   @Column
   Integer likesCount;
-  @OneToMany(mappedBy = "post")
-  @JoinColumn
-  List<DbTag> tags;
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<DbTag> tags;
   @Column
   @CreationTimestamp
   private LocalDateTime createdAt;

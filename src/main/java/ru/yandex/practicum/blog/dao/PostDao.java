@@ -18,10 +18,8 @@ public class PostDao {
   private String body;
   private String preview;
   private UUID picture;
-  List<CommentDao> comments;
+  Integer commentsCount;
   Integer likesCount;
   List<TagDao> tags;
   private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
-  private LocalDateTime deletedAt;
 }

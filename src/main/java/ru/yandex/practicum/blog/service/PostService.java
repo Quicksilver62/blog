@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.blog.dao.PostDao;
-import ru.yandex.practicum.blog.repository.PostRepository;
+import ru.yandex.practicum.blog.db.repository.PostRepository;
 
 @Service
 @RequiredArgsConstructor

@@ -19,7 +19,7 @@ public class DbTag {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @ManyToOne
-  @JoinColumn
+  @JoinColumn(name = "post_id")
   private DbPost post;
   @Column
   private String tagName;
