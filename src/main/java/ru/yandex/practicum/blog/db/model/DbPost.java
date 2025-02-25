@@ -11,9 +11,15 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(schema = "blog", name = "post")
 public class DbPost {
@@ -25,8 +31,6 @@ public class DbPost {
   private String title;
   @Column
   private String body;
-  @Column
-  private String preview;
   @Column
   private UUID picture;
   @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -41,7 +45,4 @@ public class DbPost {
   @Column
   @UpdateTimestamp
   private LocalDateTime updatedAt;
-  @Column
-  private LocalDateTime deletedAt;
-
 }

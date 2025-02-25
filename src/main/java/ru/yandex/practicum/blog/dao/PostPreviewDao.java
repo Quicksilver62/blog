@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDao {
+public class PostPreviewDao {
   private Integer id;
   private String title;
-  private String body;
+  private String preview;
   private UUID picture;
-  List<CommentDao> commentsCount;
+  Integer commentsCount;
   Integer likesCount;
   List<TagDao> tags;
   private LocalDateTime createdAt;

@@ -9,9 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+@Getter
 @Entity
 @Table(schema = "blog", name = "comment")
 public class DbComment {
@@ -31,6 +33,4 @@ public class DbComment {
   @Column
   @UpdateTimestamp
   private LocalDateTime updatedAt;
-  @Column
-  private LocalDateTime deletedAt;
 }

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TagDao {
   private Integer id;
-  private String tagName;
+  private String name;
 }

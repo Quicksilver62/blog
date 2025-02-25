@@ -46,6 +46,9 @@ dependencies {
     // Servlet API
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+
     // Thymeleaf
     implementation 'org.thymeleaf:thymeleaf-spring6:3.1.2.RELEASE'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
