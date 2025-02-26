@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Posts List</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Скрываем форму по умолчанию */
+    #addPostForm {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Posts List</h1>
+
+  <!-- Кнопка для отображения формы добавления нового поста -->
+  <button id="showAddPostForm" class="btn btn-primary mb-3">Add New Post</button>
+
+  <!-- Форма для добавления нового поста -->
+  <div id="addPostForm">
+    <h2>Add New Post</h2>
+    <form id="postForm">
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="body">Body</label>
+        <textarea class="form-control" id="body" name="body" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="picture">Picture URL</label>
+        <input type="text" class="form-control" id="picture" name="picture">
+      </div>
+      <div class="form-group">
+        <label for="tags">Tags (comma-separated)</label>
+        <input type="text" class="form-control" id="tags" name="tags" placeholder="tag1, tag2, tag3">
+      </div>
+      <button type="button" id="submitPost" class="btn btn-success">Submit</button>
+      <button type="button" id="hideAddPostForm" class="btn btn-secondary">Cancel</button>
+    </form>
+  </div>
+
+  <!-- Список постов -->
+  <div th:each="post : ${posts}">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title" th:text="${post.title}"></h5>
+        <img th:if="${post.picture}" th:src="${post.picture}" alt="Post image" class="img-fluid">
+        <p class="card-text" th:text="${post.preview}"></p>
+        <p class="card-text">
+          <small class="text-muted">Likes: <span th:text="${post.likesCount}"></span></small>
+        </p>
+        <p class="card-text">
+          <small class="text-muted">Comments: <span th:text="${post.commentsCount}"></span></small>
+        </p>
+        <p class="card-text">
+          <small class="text-muted">Tags:
+            <span th:each="tag : ${post.tags}" th:text="${tag.name} + ' '"></span>
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Пагинация -->
+  <div class="mt-3">
+    <a th:if="${posts.hasPrevious()}" th:href="@{/posts(page=${posts.number - 1}, size=${posts.size})}" class="btn btn-secondary">Previous</a>
+    <a th:if="${posts.hasNext()}" th:href="@{/posts(page=${posts.number + 1}, size=${posts.size})}" class="btn btn-secondary">Next</a>
+  </div>
+</div>
+
+<!-- JavaScript для отображения/скрытия формы и отправки данных -->
+<script>
+  // Отображение/скрытие формы
+  document.getElementById('showAddPostForm').addEventListener('click', function() {
+    document.getElementById('addPostForm').style.display = 'block';
+  });
+
+  document.getElementById('hideAddPostForm').addEventListener('click', function() {
+    document.getElementById('addPostForm').style.display = 'none';
+  });
+
+  // Отправка данных формы в формате JSON
+  document.getElementById('submitPost').addEventListener('click', function() {
+    // Собираем данные из формы
+    const postData = {
+      title: document.getElementById('title').value,
+      body: document.getElementById('body').value,
+      picture: document.getElementById('picture').value,
+      tags: document.getElementById('tags').value.split(',').map(tag => tag.trim()),
+      likesCount: 0, // По умолчанию
+      commentsCount: [], // По умолчанию
+    };
+
+    // Отправляем POST-запрос
+    fetch('/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(postData)
+    })
+    .then(response => {
+      if (response.ok) {
+        // Если запрос успешен, перезагружаем страницу
+        window.location.reload();
+      } else {
+        alert('Error creating post');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
+</body>
+</html>

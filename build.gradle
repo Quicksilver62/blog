@@ -58,6 +58,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
     testImplementation 'org.springframework:spring-test:6.1.0'
     testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 }
 
 tasks.named('test') {

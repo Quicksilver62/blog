@@ -16,7 +16,7 @@ public class PostDao {
   private Integer id;
   private String title;
   private String body;
-  private UUID picture;
+  private String picture;
   List<CommentDao> commentsCount;
   Integer likesCount;
   List<TagDao> tags;

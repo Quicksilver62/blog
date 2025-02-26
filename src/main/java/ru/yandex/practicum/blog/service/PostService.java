@@ -1,10 +1,16 @@
 package ru.yandex.practicum.blog.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.yandex.practicum.blog.dao.PostDao;
 import ru.yandex.practicum.blog.dao.PostPreviewDao;
 import ru.yandex.practicum.blog.db.model.DbPost;
@@ -17,27 +23,22 @@ import ru.yandex.practicum.blog.mapper.TagMapper;
 @RequiredArgsConstructor
 public class PostService {
 
+  private static final String UPLOAD_DIR = "$TOMCAT_HOME/webapps/static/";
+
   private final PostRepository postRepository;
   private final TagRepository tagRepository;
   private final PostMapper postMapper;
   private final TagMapper tagMapper;
 
   public Slice<PostPreviewDao> getAllPosts(Pageable pageable) {
-    var dbSlice = postRepository.findAll(pageable);
+    var dbPosts = postRepository.findAll(pageable);
 
-    var daoList = dbSlice.getContent()
+    var daoList = dbPosts.getContent()
         .stream()
         .map(postMapper::dbToDaoPreview)
-        .peek(post -> {
-          var tags = tagRepository.findAllByPostId(post.getId())
-              .stream()
-              .map(tagMapper::dbToDao)
-              .toList();
-          post.setTags(tags);
-        })
         .toList();
 
-     return new SliceImpl<>(daoList, dbSlice.getPageable(), dbSlice.hasNext());
+     return new SliceImpl<>(daoList, dbPosts.getPageable(), dbPosts.hasNext());
   }
 
   public PostDao getPostById(Integer id) {
@@ -46,8 +47,11 @@ public class PostService {
         .orElse(null);
   }
 
-  public void addAndUpdatePost(PostDao post) {
+  public void createOrUpdatePost(PostDao post, MultipartFile file) {
     DbPost dbPost;
+    var fileUrl = savePicture(file);
+    post.setPicture(fileUrl);
+
     if (post.getId() != null) {
       dbPost = postRepository.findById(post.getId()).orElseThrow();
       updatePost(dbPost, post);
@@ -56,11 +60,17 @@ public class PostService {
       dbPost = postMapper.daoToDb(post);
       setTags(dbPost, post);
     }
+
     postRepository.save(dbPost);
   }
 
-  public void deletePost(Integer postId) {
-    postRepository.deleteById(postId);
+  public void deletePost(Integer id) {
+    postRepository.deleteById(id);
+  }
+
+  public void likePost(Integer id) {
+    var dbPost = postRepository.findById(id).orElseThrow();
+    dbPost.setLikesCount(dbPost.getLikesCount() + 1);
   }
 
   private void updatePost(DbPost dbPost, PostDao postDao) {
@@ -77,5 +87,27 @@ public class PostService {
         .map(tagMapper::daoToDb)
         .toList();
     dbPost.setTags(dbTags);
+  }
+
+  private String savePicture(MultipartFile picture) {
+    if (picture.isEmpty()) {
+      return null;
+    }
+
+    try {
+      Path uploadPath = Paths.get(UPLOAD_DIR);
+      if (!Files.exists(uploadPath)) {
+        Files.createDirectories(uploadPath);
+      }
+
+      String pictureName = UUID.randomUUID() + "_" + picture.getOriginalFilename();
+
+      Path filePath = uploadPath.resolve(pictureName);
+      Files.copy(picture.getInputStream(), filePath);
+
+      return "/static/" + pictureName;
+    } catch (IOException e) {
+      throw new RuntimeException("Failed to save picture", e);
+    }
   }
 }
