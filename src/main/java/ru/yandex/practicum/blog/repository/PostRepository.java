@@ -1,10 +1,14 @@
 package ru.yandex.practicum.blog.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.blog.db.model.DbPost;
+import java.util.List;
+import java.util.Optional;
+import ru.yandex.practicum.blog.domain.Post;
 
-@Repository
-public interface PostRepository extends JpaRepository<DbPost, Integer> {
+public interface PostRepository {
 
+  List<Post> findAll(int pageNumber, int pageSize);
+  Optional<Post> findById(Integer postId);
+  void deleteById(Integer id);
+  void save(Post post);
+  void incrementLikes(Integer postId);
 }
