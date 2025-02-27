@@ -19,7 +19,7 @@ public class JdbcNativeCommentRepository implements CommentRepository {
     return jdbcTemplate.query(
         """
           select id, post_id, content, author, created_at, updated_at
-          from comments where post_id = ?
+          from blog.comments where post_id = ?
          """,
         new Object[]{postId},
         (rs, rowNum) -> new Comment(
@@ -35,7 +35,7 @@ public class JdbcNativeCommentRepository implements CommentRepository {
   @Override
   public void deleteById(Integer id) {
     jdbcTemplate.update(
-        "delete from comments where id = ?",
+        "delete from blog.comments where id = ?",
         id
     );
   }
@@ -43,23 +43,21 @@ public class JdbcNativeCommentRepository implements CommentRepository {
   @Override
   public void save(Comment comment) {
     jdbcTemplate.update(
-        "insert into comments (post_id, content, author) values (?, ?, ?)",
+        "insert into blog.comments (post_id, content, author) values (?, ?, ?)",
         comment.getPostId(),
         comment.getContent(),
-        comment.getAuthor(),
-        0
+        comment.getAuthor()
     );
   }
 
   @Override
   public void update(Comment comment) {
     jdbcTemplate.update(
-        "insert into comments (id, post_id, content, author) values (?, ?, ?)",
-        comment.getId(),
+        "update blog.comments set post_id = ?, content = ?, author = ? where id = ?",
         comment.getPostId(),
         comment.getContent(),
         comment.getAuthor(),
-        0
+        comment.getId()
     );
   }
 }

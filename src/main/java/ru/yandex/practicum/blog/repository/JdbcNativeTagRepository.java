@@ -21,7 +21,7 @@ public class JdbcNativeTagRepository implements TagRepository {
     return jdbcTemplate.query(
         """
           select id, post_id, name, created_at, updated_at
-          from tags where post_id = ?
+          from blog.tags where post_id = ?
          """,
         new Object[]{postId},
         (rs, rowNum) -> new Tag(
@@ -36,14 +36,14 @@ public class JdbcNativeTagRepository implements TagRepository {
   @Override
   public void deleteAllByPostId(int postId) {
     jdbcTemplate.update(
-        "delete from tags where post_id = ?",
+        "delete from blog.tags where post_id = ?",
         postId
     );
   }
 
   @Override
   public void saveAll(List<Tag> tags) {
-    jdbcTemplate.batchUpdate("insert into tags (post_id, name) values (?, ?)",
+    jdbcTemplate.batchUpdate("insert into blog.tags (post_id, name) values (?, ?)",
         new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -54,7 +54,7 @@ public class JdbcNativeTagRepository implements TagRepository {
 
       @Override
       public int getBatchSize() {
-        return tags.size(); // Возвращаем размер списка постов
+        return tags.size();
       }
     });
   }

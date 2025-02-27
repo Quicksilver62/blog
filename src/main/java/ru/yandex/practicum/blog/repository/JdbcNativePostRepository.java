@@ -20,10 +20,10 @@ public class JdbcNativePostRepository implements PostRepository {
     return jdbcTemplate.query(
         """
           select id, title, content, picture, likes, created_at, updated_at 
-          from posts order by created_at desc 
-          offset ? limit ?
+          from blog.posts order by created_at desc 
+          limit ? offset ?
          """,
-        new Object[]{offset, pageSize},
+        new Object[]{pageSize, offset},
         (rs, rowNum) -> new Post(
             rs.getInt("id"),
             rs.getString("title"),
@@ -38,7 +38,9 @@ public class JdbcNativePostRepository implements PostRepository {
   @Override
   public Optional<Post> findById(Integer postId) {
     return jdbcTemplate.query(
-        "select id, title, content, picture, likes, created_at, updated_at from posts where id = ?",
+        """
+        select id, title, content, picture, likes, created_at, updated_at 
+        from blog.posts where id = ?""",
         new Object[]{postId},
         (rs, rowNum) -> new Post(
             rs.getInt("id"),
@@ -55,7 +57,7 @@ public class JdbcNativePostRepository implements PostRepository {
   @Override
   public void deleteById(Integer id) {
     jdbcTemplate.update(
-        "delete from posts where id = ?",
+        "delete from blog.posts where id = ?",
         id
     );
   }
@@ -63,7 +65,7 @@ public class JdbcNativePostRepository implements PostRepository {
   @Override
   public void save(Post post) {
     jdbcTemplate.update(
-        "insert into posts (title, content, picture, likes) values (?, ?, ?, ?)",
+        "insert into blog.posts (title, content, picture, likes) values (?, ?, ?, ?)",
         post.getTitle(),
         post.getContent(),
         post.getPicture(),
@@ -74,19 +76,19 @@ public class JdbcNativePostRepository implements PostRepository {
   @Override
   public void update(Post post) {
     jdbcTemplate.update(
-        "insert into posts (id, title, content, picture, likes) values (?, ?, ?, ?)",
-        post.getId(),
+        "update blog.posts set title = ?, content = ?, picture = ?, likes = ? where id = ?",
         post.getTitle(),
         post.getContent(),
         post.getPicture(),
-        0
+        post.getLikes(),
+        post.getId()
     );
   }
 
   @Override
   public void incrementLikes(Integer postId) {
     jdbcTemplate.update(
-        "update posts set likes = (select likes where post_id = ?) + 1 where post id = ?",
+        "update blog.posts set likes = likes + 1 where id = ?",
         postId
     );
   }

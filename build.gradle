@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
     implementation 'org.springframework:spring-webmvc:6.2.1'
     implementation 'jakarta.servlet:jakarta.servlet-api:6.1.0'
