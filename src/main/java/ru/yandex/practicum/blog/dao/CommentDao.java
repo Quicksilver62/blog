@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDao {
   private Integer id;
-  private String text;
+  private String content;
   private String author;
   private LocalDateTime createdAt;
 }

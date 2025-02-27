@@ -15,13 +15,12 @@ import lombok.NoArgsConstructor;
 public class PostDao {
   private Integer id;
   private String title;
-  private String body;
+  private String content;
   private String preview;
-  private UUID picture;
+  private String picture;
   List<CommentDao> comments;
   Integer likesCount;
   List<TagDao> tags;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  private LocalDateTime deletedAt;
 }

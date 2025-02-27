@@ -14,7 +14,7 @@ public class Post {
 
   private Integer id;
   private String title;
-  private String body;
+  private String content;
   private String picture;
   private Integer likes;
   private LocalDateTime createdAt;

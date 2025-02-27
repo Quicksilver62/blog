@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TagDao {
   private Integer id;
-  private String tagName;
+  private Integer postId;
+  private String name;
 }

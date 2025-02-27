@@ -10,5 +10,6 @@ public interface PostRepository {
   Optional<Post> findById(Integer postId);
   void deleteById(Integer id);
   void save(Post post);
+  void update(Post post);
   void incrementLikes(Integer postId);
 }

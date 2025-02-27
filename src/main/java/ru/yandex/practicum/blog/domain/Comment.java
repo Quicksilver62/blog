@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Comment {
   private Integer id;
-  private Post post;
-  private String text;
+  private Integer postId;
+  private String content;
   private String author;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;

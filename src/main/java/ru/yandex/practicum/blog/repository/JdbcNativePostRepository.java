@@ -19,7 +19,7 @@ public class JdbcNativePostRepository implements PostRepository {
     int offset = (pageNumber - 1) * pageSize;
     return jdbcTemplate.query(
         """
-          select id, title, body, picture, likes, created_at, updated_at 
+          select id, title, content, picture, likes, created_at, updated_at 
           from posts order by created_at desc 
           offset ? limit ?
          """,
@@ -27,7 +27,7 @@ public class JdbcNativePostRepository implements PostRepository {
         (rs, rowNum) -> new Post(
             rs.getInt("id"),
             rs.getString("title"),
-            rs.getString("body"),
+            rs.getString("content"),
             rs.getString("picture"),
             rs.getInt("likes"),
             rs.getObject("created_at", LocalDateTime.class),
@@ -38,12 +38,12 @@ public class JdbcNativePostRepository implements PostRepository {
   @Override
   public Optional<Post> findById(Integer postId) {
     return jdbcTemplate.query(
-        "select id, title, body, picture, likes, created_at, updated_at from posts where id = ?",
+        "select id, title, content, picture, likes, created_at, updated_at from posts where id = ?",
         new Object[]{postId},
         (rs, rowNum) -> new Post(
             rs.getInt("id"),
             rs.getString("title"),
-            rs.getString("body"),
+            rs.getString("content"),
             rs.getString("picture"),
             rs.getInt("likes"),
             rs.getObject("created_at", LocalDateTime.class),
@@ -63,9 +63,21 @@ public class JdbcNativePostRepository implements PostRepository {
   @Override
   public void save(Post post) {
     jdbcTemplate.update(
-        "insert into posts (title, body, picture, likes) values (?, ?, ?, ?)",
+        "insert into posts (title, content, picture, likes) values (?, ?, ?, ?)",
         post.getTitle(),
-        post.getBody(),
+        post.getContent(),
+        post.getPicture(),
+        0
+    );
+  }
+
+  @Override
+  public void update(Post post) {
+    jdbcTemplate.update(
+        "insert into posts (id, title, content, picture, likes) values (?, ?, ?, ?)",
+        post.getId(),
+        post.getTitle(),
+        post.getContent(),
         post.getPicture(),
         0
     );

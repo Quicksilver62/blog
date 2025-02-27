@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Tag {
   private Integer id;
-  private Post post;
-  private String tagName;
+  private Integer postId;
+  private String name;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 }
