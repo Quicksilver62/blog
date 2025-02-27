@@ -1,8 +1,7 @@
-package ru.yandex.practicum.blog.dao;
+package ru.yandex.practicum.blog.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,15 +11,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDao {
+public class PostPreviewDto {
   private Integer id;
   private String title;
-  private String content;
   private String preview;
   private String picture;
-  List<CommentDao> comments;
+  Integer commentsCount;
   Integer likesCount;
-  List<TagDao> tags;
+  List<TagDto> tags;
   private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
 }

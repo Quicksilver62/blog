@@ -1,4 +1,4 @@
-package ru.yandex.practicum.blog.dao;
+package ru.yandex.practicum.blog.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TagDao {
+public class TagDto {
   private Integer id;
   private Integer postId;
   private String name;

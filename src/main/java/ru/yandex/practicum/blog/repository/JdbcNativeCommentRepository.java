@@ -2,6 +2,7 @@ package ru.yandex.practicum.blog.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,24 @@ public class JdbcNativeCommentRepository implements CommentRepository {
             rs.getObject("created_at", LocalDateTime.class),
             rs.getObject("updated_at", LocalDateTime.class)
         ));
+  }
+
+  @Override
+  public Optional<Comment> findById(Integer commentId) {
+    return jdbcTemplate.query(
+        """
+        select id, post_id, content, author, created_at, updated_at 
+        from blog.comments where id = ?""",
+        new Object[]{commentId},
+        (rs, rowNum) -> new Comment(
+            rs.getInt("id"),
+            rs.getInt("post_id"),
+            rs.getString("content"),
+            rs.getString("author"),
+            rs.getObject("created_at", LocalDateTime.class),
+            rs.getObject("updated_at", LocalDateTime.class)
+        )
+    ).stream().findFirst();
   }
 
   @Override

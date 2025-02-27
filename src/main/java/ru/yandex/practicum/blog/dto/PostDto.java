@@ -1,6 +1,7 @@
-package ru.yandex.practicum.blog.dao;
+package ru.yandex.practicum.blog.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +11,15 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDao {
+public class PostDto {
   private Integer id;
+  private String title;
   private String content;
-  private String author;
+  private String preview;
+  private String picture;
+  List<CommentDto> comments;
+  Integer likesCount;
+  List<TagDto> tags;
   private LocalDateTime createdAt;
+  private LocalDateTime updatedAt;
 }
